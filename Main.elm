@@ -93,7 +93,13 @@ monthPickerMonthTable model =
     div [ class "month-picker-month-table" ]
         (List.map
             (\m ->
-                button [ class "btn btn-default", onClick <| UpdateMonth <| Tuple.first m ] [ text (Tuple.second m) ]
+                button
+                    [ class "btn btn-default"
+                    , onClick <|
+                        UpdateMonth <|
+                            Tuple.first m
+                    ]
+                    [ text (Tuple.second m) ]
             )
             abbreviatedMonths
         )
@@ -104,9 +110,12 @@ monthPickerHeaderView model =
     div [ class "month-picker-header" ]
         [ div [ class "month-picker-year" ]
             [ div []
-                [ a [ class "btn btn-default month-picker-previous" ] [ span [ class "fa fa-caret-left" ] [] ]
-                , a [ class "btn btn-default month-picker-title" ] [ text ("Year " ++ (toString model.year)) ]
-                , a [ class "month-picker-next" ] [ span [ class "fa fa-caret-right" ] [] ]
+                [ a [ class "btn btn-default month-picker-previous" ]
+                    [ span [ class "fa fa-caret-left" ] [] ]
+                , a [ class "btn btn-default month-picker-title" ]
+                    [ text ("Year " ++ (toString model.year)) ]
+                , a [ class "month-picker-next" ]
+                    [ span [ class "fa fa-caret-right" ] [] ]
                 ]
             ]
         ]
