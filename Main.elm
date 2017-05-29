@@ -10,6 +10,7 @@ import Html.Events exposing (..)
 
 type alias Model =
     { showPicker : Bool
+    , view : String
     , month : String
     , year : Int
     }
@@ -17,19 +18,20 @@ type alias Model =
 
 init : ( Model, Cmd msg )
 init =
-    (Model False "" 2017) ! []
+    (Model False "none" "" 2017) ! []
 
 
 
 -- UPDATE
 
 
-type Msg month
-    = UpdateMonth month
+type Msg
+    = UpdateMonth String
     | TogglePicker
+    | ChangeView String
 
 
-update : Msg String -> Model -> ( Model, Cmd msg )
+update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
         UpdateMonth month ->
@@ -37,6 +39,9 @@ update msg model =
 
         TogglePicker ->
             ({ model | showPicker = not model.showPicker }) ! []
+
+        ChangeView view ->
+            ({ model | view = view }) ! []
 
 
 
@@ -60,7 +65,7 @@ abbreviatedMonths =
     ]
 
 
-view : Model -> Html (Msg String)
+view : Model -> Html Msg
 view model =
     let
         result =
@@ -76,20 +81,31 @@ view model =
                 , onFocus TogglePicker
                 ]
                 []
+
+        tableView =
+            if model.view == "year" then
+                yearPickerTable model
+            else
+                monthPickerTable model
     in
         if model.showPicker then
             div [ class "month-picker-overlay" ]
                 [ resultInput
                 , monthPickerHeaderView model
-                , monthPickerMonthTable model
+                , tableView
                 ]
         else
             div [ class "month-picker-overlay" ]
                 [ resultInput ]
 
 
-monthPickerMonthTable : Model -> Html (Msg String)
-monthPickerMonthTable model =
+yearPickerTable : Model -> Html Msg
+yearPickerTable model =
+    div [] []
+
+
+monthPickerTable : Model -> Html Msg
+monthPickerTable model =
     div [ class "month-picker-month-table" ]
         (List.map
             (\m ->
@@ -125,7 +141,7 @@ monthPickerHeaderView model =
 -- MAIN
 
 
-main : Program Never Model (Msg String)
+main : Program Never Model Msg
 main =
     program
         { init = init
